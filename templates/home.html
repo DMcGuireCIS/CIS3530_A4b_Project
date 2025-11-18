@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h2>Employee Overview</h2>
+
+<form method="GET">
+    <input type="text" name="search" placeholder="Search name..." value="{{ search }}">
+
+    <select name="dept">
+        <option value="">All Departments</option>
+        {% for num, name in departments %}
+            <option value="{{ num }}" {% if dept_filter == num|string %}selected{% endif %}>
+                {{ name }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <select name="sort">
+        <option value="name_asc"  {% if sort=='name_asc' %}selected{% endif %}>Name ↑</option>
+        <option value="name_desc" {% if sort=='name_desc' %}selected{% endif %}>Name ↓</option>
+        <option value="hours_asc" {% if sort=='hours_asc' %}selected{% endif %}>Hours ↑</option>
+        <option value="hours_desc"{% if sort=='hours_desc' %}selected{% endif %}>Hours ↓</option>
+    </select>
+
+    <button type="submit">Filter</button>
+</form>
+
+<table border="1">
+<tr>
+    <th>Name</th>
+    <th>Department</th>
+    <th>Dependents</th>
+    <th>Projects</th>
+    <th>Total Hours</th>
+</tr>
+
+{% for emp in employees %}
+<tr>
+    <td>{{ emp[1] }}</td>
+    <td>{{ emp[2] }}</td>
+    <td>{{ emp[3] }}</td>
+    <td>{{ emp[4] }}</td>
+    <td>{{ emp[5] }}</td>
+</tr>
+{% endfor %}
+
+</table>
+
+{% endblock %}
