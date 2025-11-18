@@ -1,4 +1,4 @@
-### 1. Setup environment
+# 1. Setup environment
 
 ------------------------------------------------------------------
 Create virtual environment for every new machine (must run once):
@@ -58,15 +58,16 @@ psql -d "$env:DATABASE_URL" -f team_setup.sql
 flask run
 
 # 5. Login as admin
-Username: admin
-Password: somepassword
+Username: admin  
+Password: somepassword  
 
 ### For group members
 
 Follow this readme to get your program up running and check that it works by copy pasting the URL after flask run to your browser. You should be able to login as admin which was defined in team_setup.sql. I generated the password_hash by running this from terminal...
 
-python
-from werkzeug.security import generate_password_hash
-print(generate_password_hash("somepassword"))
+python  
+from werkzeug.security import generate_password_hash  
+print(generate_password_hash("somepassword"))  
 
 Then, I copy pasted the hash to put as a parameter for password_hash. In this way, you can create your own users in team_setup.sql for your own testing (just follow the format I use). Right now we just have an admin user, but you can create your own "viewer" user with another password.
+
