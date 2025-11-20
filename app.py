@@ -212,8 +212,6 @@ def projects():
     # Sorting options
     sort = request.args.get("sort", "name_asc")
     sort_options = {
-        "name_asc": "p.Pname ASC",
-        "name_desc": "p.Pname DESC",
         "headcount_asc": "headcount ASC",
         "headcount_desc": "headcount DESC",
         "hours_asc": "total_hours ASC",

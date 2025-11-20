@@ -5,10 +5,8 @@
 
 <form method="GET">
     <select name="sort">
-        <option value="name_asc"  {% if sort=='name_asc' %}selected{% endif %}>Name ↑</option>
-        <option value="name_desc" {% if sort=='name_desc' %}selected{% endif %}>Name ↓</option>
-        <option value="headcount_asc"  {% if sort=='headcount_asc' %}selected{% endif %}>Employees ↑</option>
-        <option value="headcount_desc" {% if sort=='headcount_desc' %}selected{% endif %}>Employees ↓</option>
+        <option value="headcount_asc"  {% if sort=='headcount_asc' %}selected{% endif %}>Headcount(# of Employees) ↑</option>
+        <option value="headcount_desc" {% if sort=='headcount_desc' %}selected{% endif %}>Headcount(# of Employees) ↓</option>
         <option value="hours_asc" {% if sort=='hours_asc' %}selected{% endif %}>Hours ↑</option>
         <option value="hours_desc" {% if sort=='hours_desc' %}selected{% endif %}>Hours ↓</option>
     </select>
@@ -19,9 +17,9 @@
 <table border="1">
 <tr>
     <th>Project Name</th>
-    <th>Department</th>
-    <th>Employees Assigned</th>
-    <th>Total Hours Assigned</th>
+    <th>Owning Department</th>
+    <th>Headcount</th>
+    <th>Total Assigned Hours</th>
 </tr>
 
 {% for p in projects %}
@@ -32,9 +30,9 @@
       </a>
     </td>
 
-    <td>{{ p[1] }}</td>
     <td>{{ p[2] }}</td>
     <td>{{ p[3] }}</td>
+    <td>{{ p[4] }}</td>
 </tr>
 {% endfor %}
 
