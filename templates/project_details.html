@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h2>Project: {{ project[1] }}</h2>
+
+<h3>Add / Update Assignment</h3>
+
+<form method="POST" action="{{ url_for('add_assignment', project_id=project[0]) }}">
+    <label>Employee:</label>
+    <select name="employee_ssn" required>
+        {% for e in all_employees %}
+            <option value="{{ e[0] }}">{{ e[1] }}</option>
+        {% endfor %}
+    </select>
+
+    <label>Hours:</label>
+    <input type="number" name="hours" min="1" required>
+
+    <button type="submit">Add / Update</button>
+</form>
+
+<h3>Assigned Employees</h3>
+
+<table border="1">
+    <tr>
+        <th>Employee Name</th>
+        <th>Hours Assigned</th>
+    </tr>
+
+    {% for emp in employees %}
+    <tr>
+        <td>{{ emp[1] }}</td>
+        <td>{{ emp[3] }}</td>
+    </tr>
+    {% endfor %}
+
+    {% if employees|length == 0 %}
+    <tr><td colspan="3"><i>No employees assigned.</i></td></tr>
+    {% endif %}
+
+</table>
+
+<br>
+<a href="{{ url_for('projects') }}">← Back to Projects</a>
+
+{% endblock %}
