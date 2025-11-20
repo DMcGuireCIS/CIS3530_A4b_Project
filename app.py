@@ -250,7 +250,7 @@ def projects():
     )
 
 # -----------------------------------------------------------------------
-# A4: Project Details - Individual Project View
+# A4: Project Details - Details & Assignment "Upsert"
 # -----------------------------------------------------------------------
 @app.route("/project/<int:project_id>")
 def project_details(project_id):
