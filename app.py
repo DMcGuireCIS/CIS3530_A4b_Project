@@ -200,10 +200,128 @@ def home():
 # -----------------------------------------------------------------------
 # A3: Projects - Portfolio Summary
 # -----------------------------------------------------------------------
+@app.route("/")
+@app.route("/projects")
+def projects():
+
+    # Redirect to login page if user is not authenticated
+    login_redirect = ensure_logged_in()
+    if login_redirect: 
+        return login_redirect
+
+    # Sorting options
+    sort = request.args.get("sort", "name_asc")
+    sort_options = {
+        "headcount_asc": "headcount ASC",
+        "headcount_desc": "headcount DESC",
+        "hours_asc": "total_hours ASC",
+        "hours_desc": "total_hours DESC",
+    }
+    order = sort_options.get(sort, "p.Pname ASC")
+
+    sql = f"""
+        SELECT 
+            p.Pnumber,
+            p.Pname,
+            d.Dname AS department_name,
+            COALESCE(a.headcount, 0) AS headcount,
+            COALESCE(a.total_hours, 0) AS total_hours
+        FROM Project p
+        LEFT JOIN Department d ON p.Dnum = d.Dnumber
+        LEFT JOIN AllProjectsWithHeadcount a ON a.Pnumber = p.Pnumber
+        ORDER BY {order};
+    """
+
+    with get_db_connection() as connection:
+        with connection.cursor() as cursor:
+            cursor.execute(sql)
+            projects = cursor.fetchall()
+
+            cursor.execute("SELECT Dnumber, Dname FROM Department ORDER BY Dname;")
+            departments = cursor.fetchall()
+
+    return render_template(
+        "projects.html",
+        projects=projects,
+        departments=departments,
+        sort=sort
+    )
 
 # -----------------------------------------------------------------------
-# A4: Project Detials & Assignment "Upsert"
+# A4: Project Details - Details & Assignment "Upsert"
 # -----------------------------------------------------------------------
+@app.route("/project/<int:project_id>")
+def project_details(project_id):
+
+    login_redirect = ensure_logged_in()
+    if login_redirect:
+        return login_redirect
+
+    with get_db_connection() as connection:
+        with connection.cursor() as cursor:
+
+            # Fetch project
+            cursor.execute("""
+                SELECT Pnumber, Pname, Dname, Plocation
+                FROM Project
+                JOIN Department ON Dnumber = Dnum
+                WHERE Pnumber = %s;
+            """, (project_id,))
+            project = cursor.fetchone()
+
+            # Employees working on project
+            cursor.execute("""
+                SELECT 
+                    e.Ssn,
+                    e.Fname || ' ' || COALESCE(e.Minit || ' ', '') || e.Lname AS full_name,
+                    d.Dname,
+                    w.Hours
+                FROM Works_On w
+                JOIN Employee e ON e.Ssn = w.Essn
+                JOIN Department d ON d.Dnumber = e.Dno
+                WHERE w.Pno = %s
+                ORDER BY full_name;
+            """, (project_id,))
+            employees = cursor.fetchall()
+
+            # All employees for dropdown
+            cursor.execute("""
+                SELECT 
+                    Ssn,
+                    Fname || ' ' || COALESCE(Minit || ' ', '') || Lname AS full_name
+                FROM Employee
+                ORDER BY full_name;
+            """)
+            all_employees = cursor.fetchall()
+
+    return render_template(
+        "project_details.html",
+        project=project,
+        employees=employees,
+        all_employees=all_employees
+    )
+
+@app.route("/project/<int:project_id>/add", methods=["POST"])
+def add_assignment(project_id):
+
+    login_redirect = ensure_logged_in()
+    if login_redirect:
+        return login_redirect
+
+    employee_ssn = request.form["employee_ssn"]
+    hours = float(request.form["hours"])
+
+    with get_db_connection() as connection:
+        with connection.cursor() as cursor:
+
+            cursor.execute("""
+                INSERT INTO Works_On (Essn, Pno, Hours)
+                VALUES (%s, %s, %s)
+                ON CONFLICT (Essn, Pno)
+                DO UPDATE SET Hours = Works_On.Hours + EXCLUDED.Hours;
+            """, (employee_ssn, project_id, hours))
+
+    return redirect(url_for("project_details", project_id=project_id))
 
 # -----------------------------------------------------------------------
 # A5: Employee Managment (CRUD)
