@@ -12,7 +12,7 @@ python3 -m venv .venv
 ------------------------------------------------------------------
 Each time you continue working:
 
-Linux/Mac: 
+Linux/macOS: 
 source .venv/bin/activate
 
 Windows (PowerShell):
@@ -39,22 +39,21 @@ The application loads it from:
     app.secret_key = os.environ["SECRET_KEY"]
 
 Generate a secure key:
-python
->>> import secrets
->>> secrets.token_hex(32)
+python  
+>>> import secrets  
+>>> secrets.token_hex(32)  
 
 Copy output key
+
 ------------------------------------------------------------------
 Option A - Set it as an environment variable:
 
-Linux/Mac:  
+Linux/macOS/Git Bash:  
 export SECRET_KEY="secret_key_here"
 
 Windows (PowerShell):  
-$env:SECRET_KEY="secret_key_here"
+$env:SECRET_KEY="secret_key_here"  
 
-Windows (Git Bash):  
-export SECRET_KEY="secret_key_here"
 ------------------------------------------------------------------
 Option B - Use a .env file:
 
@@ -68,28 +67,25 @@ SECRET_KEY=secret_key_here
 
 createdb -U postgres cis3530_teamdb  
 
-Linux/Mac:  
-export DATABASE_URL="postgresql://user:pass@localhost/cis3530_teamdb"  
+Linux/macOS/Git Bash:  
+export DATABASE_URL="postgresql://postgres:yourpassword@localhost/cis3530_teamdb" 
 
 Windows (PowerShell):  
-$env:DATABASE_URL="postgresql://postgres:yourpassword@localhost/cis3530_teamdb"  
-
-Windows (Git Bash):  
-export DATABASE_URL="postgresql://postgres:yourpassword@localhost/cis3530_teamdb"  
+$env:DATABASE_URL="postgresql://postgres:yourpassword@localhost/cis3530_teamdb"   
 
 # 4. Load schema and your additions
 
+Linux/macOS/Git Bash:  
 psql -d "$env:DATABASE_URL" -f company_v3.02.sql  
 psql -d "$env:DATABASE_URL" -f team_setup.sql  
 
-OR
-
+Windows (PowerShell):
 psql -d $DATABASE_URL -f company_v3.02.sql  
 psql -d $DATABASE_URL -f team_setup.sql  
 
-Note: On consequent runs of these lines, you may need to drop the database and recreate it (you will know to do so if a lot of "transactions" are aborted in command line; otherwise, ignore):
-dropdb -U postgres cis3530_teamdb
-createdb -U postgres cis3530_teamdb
+Note: On consequent runs of these lines, you may need to drop and recreate the database if you see many "transactions" aborted messages:  
+dropdb -U postgres cis3530_teamdb  
+createdb -U postgres cis3530_teamdb  
 
 # 5. Run the app
 
