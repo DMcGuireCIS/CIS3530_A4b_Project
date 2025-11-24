@@ -79,7 +79,7 @@ Linux/macOS/Git Bash:
 psql -d "$env:DATABASE_URL" -f company_v3.02.sql  
 psql -d "$env:DATABASE_URL" -f team_setup.sql  
 
-Windows (PowerShell):
+Windows (PowerShell):  
 psql -d $DATABASE_URL -f company_v3.02.sql  
 psql -d $DATABASE_URL -f team_setup.sql  
 
