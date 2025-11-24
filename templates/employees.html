@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h2>Employee Management</h2>
+
+{% for m in get_flashed_messages() %}
+<p style="color:red;">{{ m }}</p>
+{% endfor %}
+
+{% if is_admin() %}
+    <p style="margin-top: 10px;">
+        <a href="{{ url_for('import_employees') }}">Excel Import (XLSX)</a>
+    </p>
+    <a href="{{ url_for('add_employee') }}">+ Add Employee</a>
+{% endif %}
+
+<table border="1" style="margin-top: 10px;">
+    <tr>
+        <th>Name</th>
+        <th>Address</th>
+        <th>Salary</th>
+        <th>Department</th>
+        <th>Actions</th>
+    </tr>
+
+    {% for e in employees %}
+    <tr>
+        <td>{{ e[1] }}</td>
+        <td>{{ e[2] }}</td>
+        <td>{{ e[3] }}</td>
+        <td>{{ e[4] }}</td>
+
+        <td>
+            {% if is_admin() %}
+                <a href="{{ url_for('edit_employee', ssn=e[0]) }}">Edit</a> |
+                <form method="POST" action="{{ url_for('delete_employee', ssn=e[0]) }}" style="display:inline;">
+                    <button type="submit" onclick="return confirm('Delete this employee?');">Delete</button>
+                </form>
+            {% else %}
+                <i>Read-only</i>
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+
+</table>
+
+{% endblock %}

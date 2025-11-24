@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h2>Add Employee</h2>
+
+<form method="POST" style="display: inline-block;">
+
+    <div style="margin-bottom: 12px;">
+        <label>SSN:</label><br>
+        <input type="text" name="ssn" required>
+    </div>
+
+    <div style="margin-bottom: 12px;">
+        <label>First Name:</label><br>
+        <input type="text" name="fname" required>
+    </div>
+
+    <div style="margin-bottom: 12px;">
+        <label>Middle Initial:</label><br>
+        <input type="text" name="minit" maxlength="1" required>
+    </div>
+
+    <div style="margin-bottom: 12px;">
+        <label>Last Name:</label><br>
+        <input type="text" name="lname" required>
+    </div>
+
+    <div style="margin-bottom: 12px;">
+        <label>Address:</label><br>
+        <input type="text" name="address" required>
+    </div>
+
+    <div style="margin-bottom: 12px;">
+        <label>Sex:</label><br>
+        <select name="sex" required>
+            <option value="M">M</option>
+            <option value="F">F</option>
+        </select>
+    </div>
+
+    <div style="margin-bottom: 12px;">
+        <label>Salary:</label><br>
+        <input type="number" name="salary" min="0" required>
+    </div>
+
+    <div style="margin-bottom: 12px;">
+        <label>Department:</label><br>
+        <select name="dno" required>
+            {% for num, name in departments %}
+                <option value="{{ num }}">{{ name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <button type="submit">Add Employee</button>
+</form>
+
+{% for m in get_flashed_messages() %}
+<p style="color:red;">{{ m }}</p>
+{% endfor %}
+
+<div style="margin-top: 20px;"></div>
+<a href="{{ url_for('employees') }}">← Back to Employee Management</a>
+
+{% endblock %}

@@ -3,14 +3,20 @@
 
 <h2>Login</h2>
 
-<form method="POST">
-    <label>Username:</label>
-    <input type="text" name="username" required>
+<form method="POST" style="display: inline-block;">
 
-    <label>Password:</label>
-    <input type="password" name="password" required>
+    <div style="margin-bottom: 12px;">
+        <label>Username:</label><br>
+        <input type="text" name="username" required>
+    </div>
+
+    <div style="margin-bottom: 12px;">
+        <label>Password:</label><br>
+        <input type="password" name="password" required>
+    </div>
 
     <button type="submit">Login</button>
+
 </form>
 
 {% for message in get_flashed_messages() %}

@@ -3,6 +3,7 @@
 
 <h2>Project: {{ project[1] }}</h2>
 
+{% if is_admin() %}
 <h3>Add / Update Assignment</h3>
 
 <form method="POST" action="{{ url_for('add_assignment', project_id=project[0]) }}">
@@ -18,6 +19,7 @@
 
     <button type="submit">Add / Update</button>
 </form>
+{% endif %}
 
 <h3>Assigned Employees</h3>
 

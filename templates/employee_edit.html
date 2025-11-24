@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h2>Edit Employee</h2>
+
+<form method="POST" style="display: inline-block;">
+
+    <div style="margin-bottom: 12px;">
+        <label>SSN:</label><br>
+        <input type="text" value="{{ ssn }}" disabled>
+    </div>
+
+    <div style="margin-bottom: 12px;">
+        <label>Address:</label><br>
+        <input type="text" name="address" value="{{ employee[0] }}" required>
+    </div>
+
+    <div style="margin-bottom: 12px;">
+        <label>Salary:</label><br>
+        <input type="number" name="salary" value="{{ employee[1] }}" min="0" required>
+    </div>
+
+    <div style="margin-bottom: 12px;">
+        <label>Department:</label><br>
+        <select name="dno">
+            {% for num, name in departments %}
+                <option value="{{ num }}" {% if employee[2] == num %}selected{% endif %}>
+                    {{ name }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <button type="submit">Save Changes</button>
+</form>
+
+<div style="margin-top: 20px;"></div>
+<a href="{{ url_for('employees') }}">← Back to Employee Management</a>
+
+{% endblock %}

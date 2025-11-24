@@ -31,43 +31,94 @@ Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force
 Install required packages:
 pip install -r requirements.txt
 
-# 2. Setup database (example)
+# 2. Environment Variables
 
-createdb -U postgres cis3530_teamdb
+Before running the app, you must define a SECRET_KEY.
 
-Linux/Mac:
-export DATABASE_URL="postgresql://user:pass@localhost/cis3530_teamdb"
+The application loads it from:
+    app.secret_key = os.environ["SECRET_KEY"]
 
-Windows (PowerShell):
-$env:DATABASE_URL="postgresql://postgres:yourpassword@localhost/cis3530_teamdb"
+Generate a secure key:
+python
+>>> import secrets
+>>> secrets.token_hex(32)
 
-Windows (Git Bash):
-export DATABASE_URL="postgresql://postgres:yourpassword@localhost/cis3530_teamdb"
+Copy output key
+------------------------------------------------------------------
+Option A - Set it as an environment variable:
 
-# 3. Load schema and your additions
+Linux/Mac:  
+export SECRET_KEY="secret_key_here"
 
-psql -d $DATABASE_URL -f company_v3.02.sql
-psql -d $DATABASE_URL -f team_setup.sql
+Windows (PowerShell):  
+$env:SECRET_KEY="secret_key_here"
+
+Windows (Git Bash):  
+export SECRET_KEY="secret_key_here"
+------------------------------------------------------------------
+Option B - Use a .env file:
+
+Create a file named .env in the project root, containing:
+
+SECRET_KEY=secret_key_here
+
+(Flask loads .env automatically because load_dotenv() is used in app.py)
+
+# 3. Setup database (example)
+
+createdb -U postgres cis3530_teamdb  
+
+Linux/Mac:  
+export DATABASE_URL="postgresql://user:pass@localhost/cis3530_teamdb"  
+
+Windows (PowerShell):  
+$env:DATABASE_URL="postgresql://postgres:yourpassword@localhost/cis3530_teamdb"  
+
+Windows (Git Bash):  
+export DATABASE_URL="postgresql://postgres:yourpassword@localhost/cis3530_teamdb"  
+
+# 4. Load schema and your additions
+
+psql -d "$env:DATABASE_URL" -f company_v3.02.sql  
+psql -d "$env:DATABASE_URL" -f team_setup.sql  
 
 OR
 
-psql -d "$env:DATABASE_URL" -f company_v3.02.sql
-psql -d "$env:DATABASE_URL" -f team_setup.sql
+psql -d $DATABASE_URL -f company_v3.02.sql  
+psql -d $DATABASE_URL -f team_setup.sql  
 
-# 4. Run the app
+Note: On consequent runs of these lines, you may need to drop the database and recreate it (you will know to do so if a lot of "transactions" are aborted in command line; otherwise, ignore):
+dropdb -U postgres cis3530_teamdb
+createdb -U postgres cis3530_teamdb
+
+# 5. Run the app
+
 flask run
 
-# 5. Login as admin
-Username: admin  
-Password: somepassword  
+# 6. Login as admin or viewer for RBAC
 
-### For group members
+Admin:
+    Username: admin  
+    Password: somepassword  
 
-Follow this readme to get your program up running and check that it works by copy pasting the URL after flask run to your browser. You should be able to login as admin which was defined in team_setup.sql. I generated the password_hash by running this from terminal...
+Viewer:
+    Username: viewer   
+    Password: apassword  
+
+### Bonus Implementations
+
+All bonus implementations are implemented.
+That means:
+- RBAC where only admin can see and use Add/Edit/Delete options
+- CSV "Export" button on Home and Projects page for currently filtered list
+- Excel import button for .xlsx files to insert new rows into chosen table (only available for admin role)
+
+### Other notes
+
+Password hashes were generated correctly from command line by running:
 
 python  
-from werkzeug.security import generate_password_hash  
-print(generate_password_hash("somepassword"))  
+>>> from werkzeug.security import generate_password_hash  
+>>> print(generate_password_hash("somepassword"))  
 
-Then, I copy pasted the hash to put as a parameter for password_hash. In this way, you can create your own users in team_setup.sql for your own testing (just follow the format I use). Right now we just have an admin user, but you can create your own "viewer" user with another password.
-
+Then, the generated hash was inputted into the app_user table.

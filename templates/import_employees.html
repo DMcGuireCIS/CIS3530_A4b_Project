@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h2>Import Employees (.xlsx)</h2>
+
+<form method="POST" enctype="multipart/form-data">
+
+    <label>Select .xlsx file:</label><br>
+    <input type="file" name="file" accept=".xlsx" required>
+
+    <br><br>
+    <button type="submit">Upload & Import</button>
+</form>
+
+{% for m in get_flashed_messages() %}
+    <p style="color:red; margin-top:10px;">{{ m }}</p>
+{% endfor %}
+
+<p style="margin-top:20px;">
+    ← <a href="{{ url_for('employees') }}">Back to Employee Management</a>
+</p>
+
+{% endblock %}

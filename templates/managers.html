@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h2>Manager Overview</h2>
+
+<table border="1" style="margin-top: 10px;">
+    <tr>
+        <th>Department (Number)</th>
+        <th>Manager</th>
+        <th>Employee Count</th>
+        <th>Total Hours</th>
+    </tr>
+
+    {% for m in managers %}
+    <tr>
+        <td>{{ m[0] }} ({{ m[1] }})</td>
+        <td>{{ m[2] }}</td>
+        <td>{{ m[3] }}</td>
+        <td>{{ m[4] }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

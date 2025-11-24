@@ -5,14 +5,18 @@
 
 <form method="GET">
     <select name="sort">
-        <option value="headcount_asc"  {% if sort=='headcount_asc' %}selected{% endif %}>Headcount(# of Employees) ↑</option>
-        <option value="headcount_desc" {% if sort=='headcount_desc' %}selected{% endif %}>Headcount(# of Employees) ↓</option>
+        <option value="headcount_asc"  {% if sort=='headcount_asc' %}selected{% endif %}>Headcount (# of Employees) ↑</option>
+        <option value="headcount_desc" {% if sort=='headcount_desc' %}selected{% endif %}>Headcount (# of Employees) ↓</option>
         <option value="hours_asc" {% if sort=='hours_asc' %}selected{% endif %}>Hours ↑</option>
         <option value="hours_desc" {% if sort=='hours_desc' %}selected{% endif %}>Hours ↓</option>
     </select>
 
     <button type="submit">Sort</button>
 </form>
+
+<p style="margin-top: 10px;"></p>
+<a href="{{ url_for('projects_export', sort=sort) }}" class="csv-button">Export CSV</a>
+</p>
 
 <table border="1">
 <tr>

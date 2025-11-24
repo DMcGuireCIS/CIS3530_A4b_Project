@@ -9,8 +9,14 @@
 <nav>
     <a href="{{ url_for('home') }}">Employee Overview</a>
     <a href="{{ url_for('projects') }}">Project Overview</a>
+    <a href="{{ url_for('employees') }}">Employee Management</a>
+    <a href="{{ url_for('managers') }}">Manager Overview</a>
     <a href="{{ url_for('logout') }}">Logout</a>
 </nav>
+
+{% if current_role() %}
+<p style="font-size: 12px;">Logged in as: {{ current_role() }}</p>
+{% endif %}
 
 <hr>
 
